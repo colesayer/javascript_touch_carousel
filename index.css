@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
+
 * {
   background-position: center center;
   background-repeat: no-repeat;
@@ -15,6 +17,7 @@ body{
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -24,38 +27,54 @@ body{
   width: 400%;
 }
 
-.slider .is-animating{
+.is-animating{
   transition: transform 400ms cubic-bezier( 0.5, 0, 0.5, 1 );
 }
 
 .slider-pagination{
-  z-index: 10;
-  bottom: 6.25%;
-  left: 0;
-  pointer-events: none;
-  position: absolute;
-  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
   width: 100%;
+  height: 5vh;
+  color: gray;
+  font-family: serif;
+  overflow: hidden;
 }
 
-.slider-pagination > * {
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px rgba( white, 0.75 );
-  display: inline-block;
-  height: 6px;
-  margin-left: 4px;
-  margin-right: 4px;
-  transition: background-color 250ms;
-  width: 6px;
+
+.slider-pagination a{
+  color: #A9A9A9;
+  cursor: pointer;
+  margin-right: .5%;
+  margin-left: .5%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-.slider-pagination .is-active{
-  background-color: rgba( white, 0.75 );
+.slider-pagination a:before{
+  content: ".";
+  font-size: 5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.is-active{
+  color: black;
 }
 
 .slider-panel{
-  padding-top: 10%;
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider-panel img{
+  margin: 1%;
+  width: 22%;
+  pointer-events: none;
 }
 
 .has-slider{
@@ -64,23 +83,12 @@ body{
   width: 100%;
 }
 
-a{
-  color: white;
-  font-size: 14px;
-  letter-spacing: 0.125em;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
 .title-container{
+  position: relative;
   font-family: 'Roboto Condensed', sans-serif;
+  width: 100%;
   text-align: center;
-  position: absolute;
-  width: auto;
-  top: 6%;
-  left: 0;
-  right: 0;
-  margin: auto;
+  margin-bottom: 1%;
 }
 
 .title-container h2{
@@ -90,4 +98,65 @@ a{
 
 .title-container h2:before{
   content: "MICHAEL KORS SPRING 2018";
+}
+
+.has-slider:hover .controls{
+  transition: opacity 1s;
+  opacity: 1;
+}
+
+.controls{
+  transition: opacity 1s;
+  position: absolute;
+  cursor: pointer;
+  font-size: 3rem;
+  color: #A9A9A9;
+  opacity: 0;
+  z-index: 10;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#previous{
+  left: 1%;
+}
+
+#next{
+  right: 1%;
+}
+
+@media only screen and (max-width: 768px) {
+
+  .wrapper{
+    height: 90vh;
+  }
+
+  .title-container{
+    padding-bottom: 4%;
+  }
+  .title-container h2:before{
+    content: "SPRING 2018";
+  }
+
+  .slider-panel{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+  }
+
+  .slider-panel img{
+    width: 40%;
+  }
+
+  .slider-pagination{
+    padding-top: 5%;
+  }
+
+  .controls{
+  display: none;
+  }
 }
