@@ -49,6 +49,7 @@ body{
   cursor: pointer;
   margin-right: .5%;
   margin-left: .5%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .slider-pagination a:before{
@@ -124,7 +125,12 @@ body{
   right: 1%;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
+
+  .wrapper{
+    height: 90vh;
+  }
+
   .title-container{
     padding-bottom: 4%;
   }
