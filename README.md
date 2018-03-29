@@ -1,3 +1,7 @@
-###Simple Javascript Carousel
+### Simple Javascript Carousel
 
-<a href="cs_cmyk.surge.sh">cs_cmyk.surge.sh</a>
+<a href="http://cs_cmyk.surge.sh">http://cs_cmyk.surge.sh</a>
+
+Built with HTML, CSS, and Javascript.
+
+Utilizes Hammer.js for touch events.

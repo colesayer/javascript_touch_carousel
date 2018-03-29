@@ -9,7 +9,6 @@ slider.sensitivity = 30
 slider.activeSlide = 0
 slider.slideCount = 0
 
-
 slider.init = function( selector ) {
   slider.sliderEl = document.querySelector( selector );
   slider.slideCount = slider.sliderEl.querySelectorAll( slider.sliderPanelSelector ).length;
@@ -44,7 +43,6 @@ slider.init = function( selector ) {
   sliderBackButton.onclick = function(){
     clearInterval(animation)
     slider.goBack()
-
   }
 
   const sliderManager = new Hammer.Manager( slider.sliderEl );
@@ -76,10 +74,7 @@ slider.init = function( selector ) {
 
   const animation = setInterval(function(){
       slider.goForward()
-        // let currentIndex = setNextIndex()
-        // displaySlide(currentIndex)
       }, slider.timing)
-
 };
 
 slider.goTo = function( number ) {
