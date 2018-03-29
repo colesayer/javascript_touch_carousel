@@ -3,8 +3,8 @@ window.slider = {};
 
 // 2. Settings
 slider.sliderPanelSelector = '.slider-panel';
-slider.sliderPaginationSelector = '.slider-pagination';
-slider.sensitivity = 35 // horizontal % needed to trigger swipe
+slider.sliderPaginationSelector = '.slider-pagination'
+slider.sensitivity = 30 // horizontal % needed to trigger swipe
 
 // 2. Placeholder to remember which slide we’re on
 slider.activeSlide = 0;
@@ -25,7 +25,7 @@ slider.init = function( selector ) {
   var n = 0;
   for( n; n < slider.slideCount; n++ ) {
     var activeStatus = n == slider.activeSlide ? ' class="is-active"' : '';
-    slider.sliderEl.parentElement.querySelector( slider.sliderPaginationSelector ).innerHTML += '<div ' + activeStatus + '></div>';
+    document.querySelector( slider.sliderPaginationSelector ).innerHTML += '<div ' + activeStatus + '></div>';
   }
 
   // 4d. Set up HammerJS
@@ -81,7 +81,7 @@ slider.goTo = function( number ) {
  }, 400 );
 
  // 5c. Update the counters
- var pagination = slider.sliderEl.parentElement.querySelectorAll( slider.sliderPaginationSelector + ' > *' );
+ var pagination = document.querySelectorAll( slider.sliderPaginationSelector + ' > *' );
  var n = 0;
  for( n; n < pagination.length; n++ ) {
    var className = n == slider.activeSlide ? 'is-active' : '';
