@@ -1,48 +1,63 @@
-// 1. Basic object for our stuff
 window.slider = {};
 
-// 2. Settings
-slider.sliderPanelSelector = '.slider-panel';
+slider.sliderPanelSelector = '.slider-panel'
 slider.sliderPaginationSelector = '.slider-pagination'
-slider.sensitivity = 30 // horizontal % needed to trigger swipe
+slider.sliderBack = '#previous'
+slider.sliderNext = '#next'
+slider.timing = 3000
+slider.sensitivity = 30
+slider.activeSlide = 0
+slider.slideCount = 0
 
-// 2. Placeholder to remember which slide we’re on
-slider.activeSlide = 0;
 
-// 3. Slide counter
-slider.slideCount = 0;
-
-// 4. Initialization + event listener
 slider.init = function( selector ) {
-
-  // 4a. Find the container
   slider.sliderEl = document.querySelector( selector );
-
-  // 4b. Count stuff
   slider.slideCount = slider.sliderEl.querySelectorAll( slider.sliderPanelSelector ).length;
 
-  // 4c. Populate pagination
-  var n = 0;
-  for( n; n < slider.slideCount; n++ ) {
-    var activeStatus = n == slider.activeSlide ? ' class="is-active"' : '';
-    document.querySelector( slider.sliderPaginationSelector ).innerHTML += '<div ' + activeStatus + '></div>';
+  for( let i = 0; i < slider.slideCount; i++ ) {
+
+    let pageSelector = document.querySelector( slider.sliderPaginationSelector )
+    let activeStatus = i === slider.activeSlide ? "is-active" : '';
+    let link = document.createElement("a")
+    link.setAttribute('data-index', i)
+    link.setAttribute('class', activeStatus)
+    if(i === 0){
+      link.style.color = "black"
+    }
+
+    link.onclick = function(){
+      clearInterval(animation)
+      let linkIndex = link.getAttribute('data-index')
+      slider.goTo(linkIndex)
+    }
+
+    pageSelector.append(link)
   }
 
-  // 4d. Set up HammerJS
-  var sliderManager = new Hammer.Manager( slider.sliderEl );
+  const sliderNextButton = document.querySelector( slider.sliderNext )
+  sliderNextButton.onclick = function(){
+    clearInterval(animation)
+    slider.goForward()
+  }
+
+  const sliderBackButton = document.querySelector( slider.sliderBack )
+  sliderBackButton.onclick = function(){
+    clearInterval(animation)
+    slider.goBack()
+
+  }
+
+  const sliderManager = new Hammer.Manager( slider.sliderEl );
   sliderManager.add( new Hammer.Pan({ threshold: 0, pointers: 0 }) );
   sliderManager.on( 'pan', function( e ) {
+    clearInterval(animation)
 
-    // 4e. Calculate pixel movements into 1:1 screen percents so gestures track with motion
-    var percentage = 100 / slider.slideCount * e.deltaX / window.innerWidth;
+    let percentage = 100 / slider.slideCount * e.deltaX / window.innerWidth;
 
-    // 4f. Multiply percent by # of slide we’re on
-    var percentageCalculated = percentage - 100 / slider.slideCount * slider.activeSlide;
+    let percentageCalculated = percentage - 100 / slider.slideCount * slider.activeSlide;
 
-    // 4g. Apply transformation
     slider.sliderEl.style.transform = 'translateX( ' + percentageCalculated + '% )';
 
-    // 4h. Snap to slide when done
     if( e.isFinal ) {
       if( e.velocityX > 1 ) {
         slider.goTo( slider.activeSlide - 1 );
@@ -58,12 +73,17 @@ slider.init = function( selector ) {
       }
     }
   });
+
+  const animation = setInterval(function(){
+      slider.goForward()
+        // let currentIndex = setNextIndex()
+        // displaySlide(currentIndex)
+      }, slider.timing)
+
 };
 
-// 5. Update current slide
 slider.goTo = function( number ) {
 
-  // 5a. Stop it from doing weird things like moving to slides that don’t exist
   if( number < 0 )
     slider.activeSlide = 0;
   else if( number > slider.slideCount - 1 )
@@ -71,22 +91,44 @@ slider.goTo = function( number ) {
   else
     slider.activeSlide = number;
 
- // 5b. Apply transformation & smoothly animate via .is-animating CSS
  slider.sliderEl.classList.add( 'is-animating' );
- var percentage = -( 100 / slider.slideCount ) * slider.activeSlide;
+ let percentage = -( 100 / slider.slideCount ) * slider.activeSlide;
  slider.sliderEl.style.transform = 'translateX( ' + percentage + '% )';
  clearTimeout( slider.timer );
  slider.timer = setTimeout( function() {
    slider.sliderEl.classList.remove( 'is-animating' );
  }, 400 );
 
- // 5c. Update the counters
- var pagination = document.querySelectorAll( slider.sliderPaginationSelector + ' > *' );
- var n = 0;
- for( n; n < pagination.length; n++ ) {
-   var className = n == slider.activeSlide ? 'is-active' : '';
-   pagination[n].className = className;
+ let pagination = document.querySelectorAll( slider.sliderPaginationSelector + ' > *' );
+
+ for( let n = 0; n < pagination.length; n++ ) {
+
+   if(n === parseInt(slider.activeSlide)){
+     pagination[n].className = "is-active"
+     pagination[n].style.color = "black"
+   } else {
+     pagination[n].className = ""
+     pagination[n].style.color = "#A9A9A9"
+   }
+
  }
 };
+
+slider.goForward = function(){
+  if(slider.activeSlide === slider.slideCount - 1){
+    slider.goTo(0)
+  } else {
+    slider.goTo(slider.activeSlide + 1)
+  }
+}
+
+slider.goBack = function(){
+  if(slider.activeSlide === 0){
+    slider.goTo(slider.slideCount - 1)
+  } else {
+    slider.goTo(slider.activeSlide - 1)
+  }
+}
+
 
 slider.init( '#slider' );
